@@ -11,11 +11,11 @@
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native';
 
-import Roulette from './components/roulette/Roulette';
+import Roulette from './components/Roulette';
 
 const App = () => {
   const state = {
-    options: ['x2', 'pieza', '+100', '-100'],
+    options: ['x2', 'pieza', '+100', '-100', 'efecto'],
   };
   const [rouletteActive, setRouletteActive] = useState(false);
   const [selectedRouletteOption, setSelectedRouletteOption] = useState(-1);

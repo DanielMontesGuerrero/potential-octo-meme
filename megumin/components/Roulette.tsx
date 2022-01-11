@@ -8,10 +8,9 @@ import {
   GestureResponderEvent,
   Dimensions,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import LeverLeft from '../../assets/LeverLeft.svg';
-import LeverRight from '../../assets/LeverRight.svg';
-import ColorSchema from '../../assets/ColorSchema';
+import LeverLeft from '../assets/LeverLeft.svg';
+import LeverRight from '../assets/LeverRight.svg';
+import ColorSchema from '../assets/ColorSchema';
 
 type RouletteProps = {
   width: number;
@@ -23,25 +22,28 @@ type RouletteProps = {
 };
 
 const Roulette = (props: RouletteProps) => {
-  const gradientColors = [
-    ColorSchema.light.normal,
-    ColorSchema.light.normal,
-    ColorSchema.light.light,
-    ColorSchema.light.light,
-    ColorSchema.light.dark,
-    ColorSchema.light.dark,
-  ];
-  const gradientLocations = [0.75, 0.75, 0.75, 0.85, 0.85, 1];
   const [option, setOption] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
-      const displayedOption =
-        props.selectedOption !== -1
-          ? props.selectedOption
-          : (option + 1) % props.options.length;
+      const displayedOption = Math.floor(Math.random() * props.options.length);
       setOption(displayedOption);
     }, 100);
     return () => clearInterval(interval);
+  });
+
+  const options = props.options.map((item, index) => {
+    const itemStyle: any[] = [styles.optionsItem];
+    if (index === option && props.selectedOption === -1) {
+      itemStyle.push(styles.optionsActive);
+    }
+    if (index === props.selectedOption) {
+      itemStyle.push(styles.optionsSelected);
+    }
+    return (
+      <View key={index} style={itemStyle}>
+        <Text style={styles.optionsText}>{item}</Text>
+      </View>
+    );
   });
 
   return (
@@ -59,14 +61,16 @@ const Roulette = (props: RouletteProps) => {
         visible={props.active}
         hardwareAccelerated={true}>
         <View style={styles.centeredView}>
-          <LinearGradient
-            start={{x: 0, y: 1}}
-            end={{x: 1, y: 0}}
-            locations={gradientLocations}
-            colors={gradientColors}
-            style={styles.rouletteView}>
-            <Text style={styles.rouletteViewText}>{props.options[option]}</Text>
-          </LinearGradient>
+          <View style={styles.rouletteView}>
+            <Text style={styles.rouletteViewText}>
+              {
+                props.options[
+                  props.selectedOption === -1 ? option : props.selectedOption
+                ]
+              }
+            </Text>
+            <View style={styles.optionsContainer}>{options}</View>
+          </View>
         </View>
       </Modal>
     </View>
@@ -85,16 +89,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rouletteView: {
-    width: (2 * Dimensions.get('window').width) / 5,
     padding: 35,
     alignItems: 'center',
     borderRadius: 5,
   },
   rouletteViewText: {
-    color: 'black',
     textAlign: 'center',
     fontStyle: 'italic',
     fontWeight: 'bold',
+    fontSize: 30,
+  },
+  optionsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  optionsItem: {
+    margin: 2,
+    backgroundColor: ColorSchema.light.dark,
+    width: (1 * Dimensions.get('window').width) / 4,
+    height: (1 * Dimensions.get('window').width) / 4,
+  },
+  optionsActive: {
+    backgroundColor: ColorSchema.light.normal,
+  },
+  optionsSelected: {
+    backgroundColor: 'white',
+  },
+  optionsText: {
+    color: 'black',
+    textAlign: 'center',
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
 });
 
