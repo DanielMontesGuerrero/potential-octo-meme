@@ -48,7 +48,7 @@ const Roulette = (props: RouletteProps) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={props.onPress} style={{}}>
+      <TouchableOpacity onPress={props.onPress}>
         {props.active ? (
           <LeverLeft width={props.width} height={props.height} />
         ) : (
