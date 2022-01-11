@@ -6,7 +6,9 @@ import {
   View,
   Text,
   GestureResponderEvent,
+  Dimensions,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import LeverLeft from '../../assets/LeverLeft.svg';
 import LeverRight from '../../assets/LeverRight.svg';
 import ColorSchema from '../../assets/ColorSchema';
@@ -21,6 +23,15 @@ type RouletteProps = {
 };
 
 const Roulette = (props: RouletteProps) => {
+  const gradientColors = [
+    ColorSchema.light.normal,
+    ColorSchema.light.normal,
+    ColorSchema.light.light,
+    ColorSchema.light.light,
+    ColorSchema.light.dark,
+    ColorSchema.light.dark,
+  ];
+  const gradientLocations = [0.75, 0.75, 0.75, 0.85, 0.85, 1];
   const [option, setOption] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,9 +59,14 @@ const Roulette = (props: RouletteProps) => {
         visible={props.active}
         hardwareAccelerated={true}>
         <View style={styles.centeredView}>
-          <View style={styles.rouletteView}>
+          <LinearGradient
+            start={{x: 0, y: 1}}
+            end={{x: 1, y: 0}}
+            locations={gradientLocations}
+            colors={gradientColors}
+            style={styles.rouletteView}>
             <Text style={styles.rouletteViewText}>{props.options[option]}</Text>
-          </View>
+          </LinearGradient>
         </View>
       </Modal>
     </View>
@@ -69,14 +85,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rouletteView: {
-    backgroundColor: ColorSchema.light.normal,
-    borderRadius: 20,
+    width: (2 * Dimensions.get('window').width) / 5,
     padding: 35,
     alignItems: 'center',
+    borderRadius: 5,
   },
   rouletteViewText: {
     color: 'black',
     textAlign: 'center',
+    fontStyle: 'italic',
+    fontWeight: 'bold',
   },
 });
 
