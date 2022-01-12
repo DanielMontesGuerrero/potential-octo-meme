@@ -10,6 +10,7 @@
 
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native';
+import {GCanvasView} from '@flyskywhy/react-native-gcanvas';
 
 import Roulette from './components/Roulette';
 
@@ -19,6 +20,7 @@ const App = () => {
   };
   const [rouletteActive, setRouletteActive] = useState(false);
   const [selectedRouletteOption, setSelectedRouletteOption] = useState(-1);
+  const [canvas, setCanvas] = useState(null);
   const manageRoulette = () => {
     setRouletteActive(true);
     setTimeout(() => {
@@ -32,6 +34,19 @@ const App = () => {
   const manageRouletteSelectedOption = () => {
     const value = Math.floor(Math.random() * state.options.length);
     setSelectedRouletteOption(value);
+  };
+  const initCanvas = (_canvas) => {
+    if (canvas) {
+      return;
+    }
+    setCanvas(_canvas);
+    draw(_canvas.getContext('2d'));
+  };
+  const draw = (ctx) => {
+    console.log('Drawing');
+    ctx.beginPath();
+    ctx.fillStyle = 'red';
+    ctx.fillRect(0, 0, 50, 50);
   };
 
   return (
@@ -48,6 +63,13 @@ const App = () => {
         active={rouletteActive}
         onPress={manageRoulette}
         selectedOption={selectedRouletteOption}
+      />
+      <GCanvasView
+        onCanvasCreate={initCanvas}
+        style={{
+          width: 100,
+          height: 100,
+        }}
       />
     </SafeAreaView>
   );
