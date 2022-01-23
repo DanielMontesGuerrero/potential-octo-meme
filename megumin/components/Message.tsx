@@ -1,17 +1,14 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ColorSchema from '../assets/ColorSchema';
 import * as Animatable from 'react-native-animatable';
 
 type MessageProps = {
-  height: number;
   message: string;
-  state: string;
 };
 
 const defaultProps = {
-  state: 'hidden',
   message: '',
 };
 
@@ -27,38 +24,34 @@ const Message = (props: MessageProps) => {
   const gradientLocations = [0.75, 0.75, 0.75, 0.85, 0.85, 1];
   const view = useRef(null);
   const animationDuration = 1000;
+  const animationGap = 1000;
+  const [displayedMessage, setDisplayedMessage] = useState('');
 
   useEffect(() => {
-    switch (props.state) {
-      case 'show':
-        view?.current?.pulse(animationDuration);
-        break;
-      case 'enter':
-        view?.current?.bounceInLeft(animationDuration);
-        break;
-      case 'exit':
-        view?.current?.bounceOutRight(animationDuration);
-        break;
-      case 'hide':
-      default:
-        console.log('Hide');
-    }
+    const interval = setInterval(() => {
+      view?.current?.pulse(animationDuration);
+    }, animationGap);
+    return () => clearInterval(interval);
   });
+  useEffect(() => {
+    view?.current?.bounceOutRight(animationDuration).then(() => {
+      setDisplayedMessage(props.message);
+      view?.current?.bounceInLeft(animationDuration);
+    });
+  }, [props.message]);
 
   return (
     <Animatable.View ref={view} style={styles.container}>
-      {props.state !== 'hide' ? (
-        <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 1}}
-          locations={gradientLocations}
-          colors={gradientColors}
-          style={styles.rouletteView}>
-          <Text style={styles.rouletteViewText}>{props.message}</Text>
-        </LinearGradient>
-      ) : (
-        <></>
-      )}
+      <LinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
+        locations={gradientLocations}
+        colors={gradientColors}
+        style={styles.rouletteView}>
+        <Text adjustsFontSizeToFit style={styles.rouletteViewText}>
+          {displayedMessage}
+        </Text>
+      </LinearGradient>
     </Animatable.View>
   );
 };

@@ -17,11 +17,11 @@ import Message from './components/Message';
 const App = () => {
   const state = {
     options: ['x2', 'pieza', '+100', '-100', 'efecto'],
-    messageState: ['hide', 'enter', 'show', 'exit'],
+    messages: ['Hola xd', 'Que pro B)', 'Que noob'],
   };
   const [rouletteActive, setRouletteActive] = useState(false);
   const [selectedRouletteOption, setSelectedRouletteOption] = useState(-1);
-  const [messageState, setMessageState] = useState(0);
+  const [messageIndex, setMessageIndex] = useState(0);
   const manageRoulette = () => {
     setRouletteActive(true);
     setTimeout(() => {
@@ -38,11 +38,9 @@ const App = () => {
   };
   useEffect(() => {
     const interval = setInterval(() => {
-      setMessageState((messageState + 1) % 4);
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-    };
+      setMessageIndex((messageIndex + 1) % state.messages.length);
+    }, 9000);
+    return () => clearInterval(interval);
   });
 
   return (
@@ -53,11 +51,7 @@ const App = () => {
         justifyContent: 'center',
       }}>
       <View style={{height: 100}}>
-        <Message
-          height={10}
-          message="Hola xd"
-          state={state.messageState[messageState]}
-        />
+        <Message message={state.messages[messageIndex]} />
       </View>
       <Roulette
         width={50}
