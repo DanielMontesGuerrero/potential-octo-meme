@@ -7,6 +7,9 @@ on:
 
 jobs:
   check:
+    defaults:
+      run:
+        working-directory: megumin
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
