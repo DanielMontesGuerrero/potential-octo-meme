@@ -7,14 +7,13 @@ on:
 
 jobs:
   check:
-    defaults:
-      run:
-        working-directory: megumin
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@master
       - name: Setup env
         run: npm ci
+        working-directory: ./megumin
       - name: Check lint
         run: npm run lint
+        working-directory: ./megumin
