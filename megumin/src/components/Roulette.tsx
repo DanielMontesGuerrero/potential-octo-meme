@@ -8,9 +8,9 @@ import {
   GestureResponderEvent,
   Dimensions,
 } from 'react-native';
-import LeverLeft from '../assets/LeverLeft.svg';
-import LeverRight from '../assets/LeverRight.svg';
-import ColorSchema from '../assets/ColorSchema';
+import LeverLeft from '../../assets/LeverLeft.svg';
+import LeverRight from '../../assets/LeverRight.svg';
+import ColorSchema from '../../assets/ColorSchema';
 
 type RouletteProps = {
   width: number;
