@@ -1,8 +1,8 @@
-import {StyleSheet, View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import Svg, {Circle} from 'react-native-svg';
 import {Player} from '../shared/types';
 import {secondsSinceEpoch} from '../shared/utils';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
+import Svg, {Circle} from 'react-native-svg';
 
 type ScoreboardProps = {
   players: Player[];

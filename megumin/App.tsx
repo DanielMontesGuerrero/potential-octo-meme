@@ -7,15 +7,13 @@
  *
  * @format
  */
-
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-
-import Roulette from './src/components/Roulette';
+import ColorSchema from './assets/ColorSchema';
 import Message from './src/components/Message';
+import Roulette from './src/components/Roulette';
 import Scoreboard from './src/components/Scoreboard';
 import {secondsSinceEpoch} from './src/shared/utils';
-import ColorSchema from './assets/ColorSchema';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 
 const App = () => {
   const defaultState = {
