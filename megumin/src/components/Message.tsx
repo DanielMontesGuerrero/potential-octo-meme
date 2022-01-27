@@ -1,8 +1,8 @@
+import ColorSchema from '../../assets/ColorSchema';
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import ColorSchema from '../../assets/ColorSchema';
 import * as Animatable from 'react-native-animatable';
+import LinearGradient from 'react-native-linear-gradient';
 
 type MessageProps = {
   message: string;
@@ -22,7 +22,7 @@ const Message = (props: MessageProps) => {
     ColorSchema.purple.dark,
   ];
   const gradientLocations = [0.75, 0.75, 0.75, 0.85, 0.85, 1];
-  const view = useRef(null);
+  const view = useRef<any>(null);
   const animationDuration = 1000;
   const animationGap = 1000;
   const [displayedMessage, setDisplayedMessage] = useState('');
