@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import ColorSchema from '../assets/ColorSchema';
+import ColorSchema from '../../assets/ColorSchema';
 import * as Animatable from 'react-native-animatable';
 
 type MessageProps = {
