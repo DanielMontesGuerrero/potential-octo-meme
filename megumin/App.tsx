@@ -23,7 +23,7 @@ const App = () => {
       {
         id: 1,
         name: 'Player 1',
-        color: ColorSchema.blue.normal,
+        color: ColorSchema.yellow.normal,
         score: 0,
       },
       {
@@ -74,7 +74,7 @@ const App = () => {
       const value = Math.round(Math.random() * 10);
       state.players[index].score += value;
       setState(state);
-    }, 2000);
+    }, 800);
     return () => {
       clearInterval(intervalMessage);
       clearInterval(intervalScoreboard);
