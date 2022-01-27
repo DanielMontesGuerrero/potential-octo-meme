@@ -15,10 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Setup env
-        uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install
+        run: npm ci
       - name: Check lint
-        uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: run lint
+        run: npm run lint
