@@ -28,3 +28,5 @@ target 'megumin' do
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
+
+pod "GCanvas", :path => "../node_modules/@flyskywhy/react-native-gcanvas/GCanvas.podspec"

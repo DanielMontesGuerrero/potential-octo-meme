@@ -11,9 +11,10 @@ import ColorSchema from './assets/ColorSchema';
 import Message from './src/components/Message';
 import Roulette from './src/components/Roulette';
 import Scoreboard from './src/components/Scoreboard';
+import Board from './src/components/board/Board';
 import {secondsSinceEpoch} from './src/shared/utils';
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 
 const App = () => {
   const defaultState = {
@@ -46,6 +47,153 @@ const App = () => {
       },
     ],
     beginTime: secondsSinceEpoch(),
+    board: {
+      arrows: [{angle: 0}, {angle: 0}, {angle: 0}, {angle: 0}],
+      balls: [
+        [
+          {type: 1, position: {x: 0, y: 0}},
+          {type: 1, position: {x: 1, y: 1}},
+        ],
+        [
+          {type: 1, position: {x: 0, y: 5}},
+          {type: 1, position: {x: 1, y: 6}},
+        ],
+        [
+          {type: 1, position: {x: 5, y: 0}},
+          {type: 1, position: {x: 6, y: 1}},
+        ],
+        [
+          {type: 1, position: {x: 5, y: 5}},
+          {type: 1, position: {x: 6, y: 6}},
+        ],
+      ],
+      matrix: {
+        rows: 10,
+        cols: 10,
+        cells: [
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 10},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 0},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 10},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 0},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 10},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 0},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 10},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+          ],
+          [
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 100},
+            {health: 10},
+          ],
+        ],
+      },
+    },
   };
   const [state, setState] = useState(defaultState);
   const [rouletteActive, setRouletteActive] = useState(false);
@@ -75,9 +223,30 @@ const App = () => {
       state.players[index].score += value;
       setState(state);
     }, 800);
+    const intervalBoard = setInterval(() => {
+      for (let i = 0; i < 4; i++) {
+        state.board.arrows[i].angle += 0.01;
+        if (state.board.arrows[i].angle > 2 * Math.PI) {
+          state.board.arrows[i].angle -= 2 * Math.PI;
+        }
+      }
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < state.board.balls[i].length; j++) {
+          state.board.balls[i][j].position.x += 0.01;
+          if (state.board.balls[i][j].position.x > 10) {
+            state.board.balls[i][j].position.x -= 10;
+          }
+          state.board.balls[i][j].position.y += 0.01;
+          if (state.board.balls[i][j].position.y > 10) {
+            state.board.balls[i][j].position.y -= 10;
+          }
+        }
+      }
+    }, 10);
     return () => {
       clearInterval(intervalMessage);
       clearInterval(intervalScoreboard);
+      clearInterval(intervalBoard);
     };
   });
 
@@ -88,6 +257,13 @@ const App = () => {
       </View>
       <View style={{height: 150}}>
         <Scoreboard players={state.players} beginTime={state.beginTime} />
+      </View>
+      <View style={{height: Dimensions.get('window').width}}>
+        <Board
+          width={Dimensions.get('window').width}
+          height={Dimensions.get('window').width}
+          board={state.board}
+        />
       </View>
       <View style={{height: 100}}>
         <Roulette
