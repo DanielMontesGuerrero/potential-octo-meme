@@ -16,7 +16,6 @@ const Board = (props: BoardProps) => {
 
   function draw() {
     if (ctx === null) {
-      console.log('draw returned');
       return;
     }
     requestAnimationFrame(() => draw());
@@ -30,7 +29,6 @@ const Board = (props: BoardProps) => {
     canvas = _canvas;
     ctx = canvas.getContext('2d');
     draw();
-    console.log('init');
   };
 
   return (
