@@ -1,0 +1,17 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none"
+	xmlns="http://www.w3.org/2000/svg">
+	<g id="Alfil">
+		<g id="body">
+			<path id="Polygon_5" d="M100.211 14.9733C147.914 82.6113 176.526 121.053 149.641 167.914H50.7822C33.6751 131.618 24.7284 110.853 100.211 14.9733Z" fill="black"/>
+			<ellipse id="Ellipse_18" cx="98.8889" cy="17.1123" rx="19.5556" ry="17.1123" fill="black"/>
+			<rect id="Rectangle 3" x="50" y="151.872" width="100.222" height="48.1283" rx="5" fill="black"/>
+		</g>
+		<g id="detail">
+			<path id="Line_4" d="M57 169.5C73.7222 163.5 126.278 163.5 143 169.5M57 169.5C73.7222 163.5 126.278 163.5 143 169.5" stroke="white" stroke-width="5"/>
+			<path id="Line_5" d="M57 191.5C73.7222 185.5 126.278 185.5 143 191.5M57 191.5C73.7222 185.5 126.278 185.5 143 191.5" stroke="white" stroke-width="5"/>
+			<ellipse id="Ellipse_20" rx="5.93267" ry="1.00937" transform="matrix(0.984199 -0.177064 0.248614 0.968603 65.4787 178.028)" fill="white" stroke="white" stroke-width="4"/>
+			<ellipse id="Ellipse_22" rx="5.93266" ry="1.00938" transform="matrix(0.984194 0.177096 -0.248658 0.968591 134.757 179.028)" fill="white" stroke="white" stroke-width="4"/>
+			<ellipse id="Ellipse_21" cx="100" cy="175" rx="5.97222" ry="1" fill="white" stroke="white" stroke-width="4"/>
+		</g>
+	</g>
+</svg>

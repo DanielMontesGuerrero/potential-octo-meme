@@ -43,3 +43,9 @@ export type Board = {
   balls: Ball[][];
   arrows: Arrow[];
 };
+
+export type Piece = {
+  type: PieceType;
+  quantity: number;
+  isActive: boolean;
+};

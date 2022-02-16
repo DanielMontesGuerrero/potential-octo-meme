@@ -8,6 +8,7 @@
  * @format
  */
 import ColorSchema from './assets/ColorSchema';
+import CardBox from './src/components/CardBox';
 import Message from './src/components/Message';
 import Roulette from './src/components/Roulette';
 import Scoreboard from './src/components/Scoreboard';
@@ -274,6 +275,9 @@ const App = () => {
           onPress={manageRoulette}
           selectedOption={selectedRouletteOption}
         />
+      </View>
+      <View style={{height: 100}}>
+        <CardBox />
       </View>
     </View>
   );
