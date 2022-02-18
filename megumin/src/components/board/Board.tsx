@@ -11,8 +11,8 @@ type BoardProps = {
 };
 
 const Board = (props: BoardProps) => {
-  let canvas = null;
-  let ctx = null;
+  let canvas: any = null;
+  let ctx: any = null;
 
   function draw() {
     if (ctx === null) {
@@ -22,7 +22,7 @@ const Board = (props: BoardProps) => {
     drawBoard(ctx, props);
   }
 
-  const initCanvas = _canvas => {
+  const initCanvas = (_canvas: any) => {
     if (canvas) {
       return;
     }

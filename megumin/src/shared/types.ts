@@ -7,6 +7,7 @@ export type Player = {
   name: string;
   color: string;
   score: number;
+  hand: Piece[];
 };
 
 export type Cell = {
