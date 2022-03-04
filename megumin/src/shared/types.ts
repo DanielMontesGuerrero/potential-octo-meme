@@ -7,6 +7,7 @@ export type Player = {
   name: string;
   color: string;
   score: number;
+  hand: Piece[];
 };
 
 export type Cell = {
@@ -42,4 +43,10 @@ export type Board = {
   matrix: Matrix;
   balls: Ball[][];
   arrows: Arrow[];
+};
+
+export type Piece = {
+  type: PieceType;
+  quantity: number;
+  isActive: boolean;
 };

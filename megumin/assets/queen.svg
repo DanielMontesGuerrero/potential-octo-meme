@@ -1,0 +1,21 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none"
+	xmlns="http://www.w3.org/2000/svg">
+	<g id="Reina" clip-path="url(#clip0_4_57)">
+		<g id="body">
+			<path id="Rectangle_2" d="M29.1505 94.9775H170.395L160.565 187.694C113.603 204.338 87.1057 203.865 39.5991 187.694L29.1505 94.9775Z" fill="black"/>
+			<ellipse id="Ellipse_14" cx="12.1778" cy="61.6223" rx="11.8998" ry="13.0029" fill="black"/>
+			<ellipse id="Ellipse_15" cx="74.2635" cy="14.1336" rx="12.9345" ry="14.1336" fill="black"/>
+			<ellipse id="Ellipse_16" cx="188.087" cy="61.6223" rx="11.8998" ry="13.0029" fill="black"/>
+			<ellipse id="Ellipse_17" cx="128.071" cy="14.1336" rx="12.9345" ry="14.1336" fill="black"/>
+			<path id="Polygon_1" d="M72.5879 7.01216C87.3045 33.5433 95.4049 53.1099 109.664 93.7005L49.8515 99.4185C54.0636 63.9261 59.251 43.6669 72.5879 7.01216Z" fill="black"/>
+			<path id="Polygon_2" d="M128.186 8.95469C141.695 45.7972 146.632 66.0186 150.922 101.361L91.11 95.643L106.341 52.0115L128.186 8.95469Z" fill="black"/>
+			<path id="Polygon_3" d="M6.9853 55.9823L58.5968 97.8162L32.6415 120.361L6.9853 55.9823Z" fill="black"/>
+			<path id="Polygon_4" d="M193.014 55.9818L167.36 120.362L141.404 97.8175L193.014 55.9818Z" fill="black"/>
+		</g>
+	</g>
+	<defs>
+		<clipPath id="clip0_4_57">
+			<rect width="200" height="200" fill="white"/>
+		</clipPath>
+	</defs>
+</svg>
