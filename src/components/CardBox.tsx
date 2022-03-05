@@ -5,6 +5,7 @@ import KnigthIcon from '../../assets/knight.svg';
 import PawnIcon from '../../assets/pawn.svg';
 import QueenIcon from '../../assets/queen.svg';
 import RookIcon from '../../assets/rook.svg';
+import DefaultStyles from '../shared/styles';
 import {Piece, PieceType} from '../shared/types';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
@@ -108,9 +109,15 @@ const Card = (props: CardProps) => {
         <Animated.View style={[translateStyle, styles.flex]}>
           <TouchableOpacity
             onPress={event => props.piece.onPress(event)}
-            style={[styles.cardContainer, backgroundColor]}>
+            style={[
+              DefaultStyles.centeredContainer,
+              styles.cardContainer,
+              backgroundColor,
+            ]}>
             {getIcon(props.piece.type, props.piece.length)}
-            <Text>{props.piece.quantity}</Text>
+            <Text style={DefaultStyles.defaultText}>
+              {props.piece.quantity}
+            </Text>
           </TouchableOpacity>
         </Animated.View>
       </PanGestureHandler>
@@ -158,7 +165,7 @@ const CardBox = (props: CardBoxProps) => {
 
   return (
     <View style={sizeStyle}>
-      <View style={styles.container}>
+      <View style={[DefaultStyles.centeredContainer, styles.container]}>
         {props.hand.map((piece, index) => {
           if (piece.quantity > 0) {
             return <Card piece={cardPropsRef.current[index]} key={index} />;
@@ -175,22 +182,13 @@ CardBox.defaultProps = DefaultCardBoxProps;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderRadius: 1,
-    borderColor: ColorSchema.background.dark,
   },
   row: {
     flex: 1,
     flexDirection: 'row',
   },
   cardContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 4,
     borderColor: ColorSchema.purple.normal,
     borderWidth: 1,

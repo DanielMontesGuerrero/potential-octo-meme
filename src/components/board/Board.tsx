@@ -1,3 +1,4 @@
+import DefaultStyles from '../../shared/styles';
 import {Board as BoardType} from '../../shared/types';
 import drawBoard from './animator';
 import {GCanvasView} from '@flyskywhy/react-native-gcanvas';
@@ -32,7 +33,7 @@ const Board = (props: BoardProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={DefaultStyles.centeredContainer}>
       <GCanvasView
         onCanvasCreate={initCanvas}
         style={[styles.gcanvas, {width: props.width, height: props.height}]}
@@ -42,11 +43,6 @@ const Board = (props: BoardProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   gcanvas: {
     flex: 1,
   },

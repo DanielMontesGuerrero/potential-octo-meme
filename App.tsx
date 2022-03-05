@@ -7,16 +7,24 @@
  *
  * @format
  */
-import Game from './src/views/game';
+import ColorSchema from './assets/ColorSchema.js';
+import Game from './src/views/Game';
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 const App = () => {
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.background}>
       <Game />
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  background: {
+    backgroundColor: ColorSchema.background.normal,
+    flex: 1,
+  },
+});
 
 export default App;
