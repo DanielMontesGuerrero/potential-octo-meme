@@ -70,7 +70,13 @@ const Roulette = (props: RouletteProps) => {
                 ]
               }
             </Text>
-            <View style={[DefaultStyles.centeredContainer, styles.optionsContainer]}>{options}</View>
+            <View
+              style={[
+                DefaultStyles.centeredContainer,
+                styles.optionsContainer,
+              ]}>
+              {options}
+            </View>
           </View>
         </View>
       </Modal>
