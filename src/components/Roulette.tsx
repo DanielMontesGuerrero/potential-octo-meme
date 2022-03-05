@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     backgroundColor: ColorSchema.background.dark,
     padding: 10,
+    width: Dimensions.get('window').width / 2,
   },
   optionsContainer: {
     alignItems: 'center',
