@@ -1,4 +1,5 @@
 import ColorSchema from '../../assets/ColorSchema';
+import DefaultStyles from '../shared/styles';
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
 import * as Animatable from 'react-native-animatable';
@@ -41,14 +42,18 @@ const Message = (props: MessageProps) => {
   }, [props.message]);
 
   return (
-    <Animatable.View ref={view} style={styles.container}>
+    <Animatable.View
+      ref={view}
+      style={[DefaultStyles.centeredContainer, styles.container]}>
       <LinearGradient
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
         locations={gradientLocations}
         colors={gradientColors}
-        style={styles.rouletteView}>
-        <Text adjustsFontSizeToFit style={styles.rouletteViewText}>
+        style={styles.messageView}>
+        <Text
+          adjustsFontSizeToFit
+          style={[DefaultStyles.defaultText, styles.messageViewText]}>
           {displayedMessage}
         </Text>
       </LinearGradient>
@@ -58,18 +63,15 @@ const Message = (props: MessageProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     width: Dimensions.get('window').width,
   },
-  rouletteView: {
+  messageView: {
     height: '100%',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  rouletteViewText: {
+  messageViewText: {
     textAlign: 'center',
     fontStyle: 'italic',
     fontWeight: 'bold',

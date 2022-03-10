@@ -1,3 +1,4 @@
+import DefaultStyles from '../shared/styles';
 import {Player} from '../shared/types';
 import {secondsSinceEpoch} from '../shared/utils';
 import React, {useEffect, useState} from 'react';
@@ -15,7 +16,10 @@ function playerItem(player: Player, index: number) {
       <Svg height="10" width="10" style={styles.playerIcon}>
         <Circle cx="5" cy="5" r="5" fill={player.color} />
       </Svg>
-      <Text>{`${player.score} - ${player.name}`}</Text>
+      <Text
+        style={
+          DefaultStyles.defaultText
+        }>{`${player.score} - ${player.name}`}</Text>
     </View>
   );
 }
@@ -46,7 +50,8 @@ const Scoreboard = (props: ScoreboardProps) => {
       <View style={styles.playerContainer}>{playerList}</View>
       <View style={styles.timeContainer}>
         <View>
-          <Text>{`${minutes}:${seconds}`}</Text>
+          <Text
+            style={DefaultStyles.defaultText}>{`${minutes}:${seconds}`}</Text>
         </View>
       </View>
     </View>

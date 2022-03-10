@@ -1,6 +1,7 @@
 import ColorSchema from '../../assets/ColorSchema';
 import LeverLeft from '../../assets/LeverLeft.svg';
 import LeverRight from '../../assets/LeverRight.svg';
+import DefaultStyles from '../shared/styles';
 import React, {useEffect, useState} from 'react';
 import {
   Modal,
@@ -60,16 +61,22 @@ const Roulette = (props: RouletteProps) => {
         transparent={true}
         visible={props.active}
         hardwareAccelerated={true}>
-        <View style={styles.centeredView}>
+        <View style={DefaultStyles.centeredContainer}>
           <View style={styles.rouletteView}>
-            <Text style={styles.rouletteViewText}>
+            <Text style={[DefaultStyles.defaultText, styles.rouletteViewText]}>
               {
                 props.options[
                   props.selectedOption === -1 ? option : props.selectedOption
                 ]
               }
             </Text>
-            <View style={styles.optionsContainer}>{options}</View>
+            <View
+              style={[
+                DefaultStyles.centeredContainer,
+                styles.optionsContainer,
+              ]}>
+              {options}
+            </View>
           </View>
         </View>
       </Modal>
@@ -81,12 +88,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   rouletteView: {
     padding: 35,
@@ -98,9 +100,12 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontWeight: 'bold',
     fontSize: 30,
+    backgroundColor: ColorSchema.background.dark,
+    padding: 10,
+    width: Dimensions.get('window').width / 2,
   },
   optionsContainer: {
-    flex: 1,
+    alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
