@@ -8,14 +8,14 @@
  * @format
  */
 import ColorSchema from './assets/ColorSchema.js';
-import Game from './src/views/Game';
+import Home from './src/views/Home';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 
 const App = () => {
   return (
     <SafeAreaView style={styles.background}>
-      <Game />
+      <Home />
     </SafeAreaView>
   );
 };
