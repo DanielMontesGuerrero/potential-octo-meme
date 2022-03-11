@@ -8,23 +8,35 @@
  * @format
  */
 import ColorSchema from './assets/ColorSchema.js';
+import Game from './src/views/Game';
 import Home from './src/views/Home';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+
+const Stack = createNativeStackNavigator();
+const Theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: ColorSchema.background.normal,
+    text: 'white',
+    primary: ColorSchema.purple.normal,
+  },
+};
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.background}>
-      <Home />
-    </SafeAreaView>
+    <NavigationContainer theme={Theme}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Game" component={Game} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  background: {
-    backgroundColor: ColorSchema.background.normal,
-    flex: 1,
-  },
-});
 
 export default App;

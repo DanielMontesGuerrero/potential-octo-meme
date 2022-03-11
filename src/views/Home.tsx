@@ -4,7 +4,7 @@ import DefaultStyles from '../shared/styles';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const Home = () => {
+const Home = ({navigation}) => {
   return (
     <View style={DefaultStyles.centeredContainer}>
       <View style={styles.titleContainer}>
@@ -15,7 +15,7 @@ const Home = () => {
       <View style={styles.buttonsContainer}>
         <Button
           title="Play"
-          onPress={() => 0}
+          onPress={() => navigation.navigate('Game')}
           color="white"
           bgColor={ColorSchema.red.normal}
         />
