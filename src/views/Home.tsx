@@ -27,12 +27,9 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
-    // justifyContent: 'center',
-    // backgroundColor: 'red',
   },
   buttonsContainer: {
     flex: 1,
-    // backgroundColor: 'blue',
   },
   title: {
     marginTop: '20%',
