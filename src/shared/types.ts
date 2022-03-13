@@ -9,6 +9,7 @@ export type Player = {
   name: string;
   score: number;
   hand: Piece[];
+  isDead: boolean;
 };
 
 export type Cell = {

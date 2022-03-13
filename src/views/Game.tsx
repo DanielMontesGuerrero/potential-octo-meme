@@ -76,6 +76,9 @@ const Game = () => {
     setDummy(!dummy);
   };
   const manageRoulette = () => {
+    if (gameHandler.game.phase === GamePhase.FINISHED) {
+      return;
+    }
     gameHandler.addEvent({
       code: EventCode.TRIGGERED_ROULETTE,
       playerId,
@@ -108,6 +111,7 @@ const Game = () => {
             width={boardSize}
             height={boardSize}
             board={gameHandler.getBoard()}
+            players={gameHandler.getPlayers()}
           />
         )}
       </View>

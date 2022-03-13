@@ -1,10 +1,11 @@
 import ColorSchema from '../../../assets/ColorSchema';
-import {Matrix, Board, Arrow} from '../../shared/types';
+import {Matrix, Board, Arrow, Player} from '../../shared/types';
 
 type BoardSetup = {
   width: number;
   height: number;
   board: Board;
+  players: Player[];
 };
 
 type Color = {
@@ -65,6 +66,9 @@ function drawMatrix(ctx, setup: BoardSetup) {
 
 function drawArrows(ctx, setup: BoardSetup) {
   const drawArrow = (playerId: number, arrow: Arrow) => {
+    if (setup.players[playerId].isDead) {
+      return;
+    }
     let x0, y0, x1, y1;
     const arrowLength = 0.7;
     const headlen = 5;
