@@ -1,3 +1,5 @@
+import {PieceType as PieceType_} from '@danielmontes/darkness/build/game/types';
+
 export type Arrow = {
   angle: number;
 };
@@ -5,7 +7,6 @@ export type Arrow = {
 export type Player = {
   id: number;
   name: string;
-  color: string;
   score: number;
   hand: Piece[];
 };
@@ -17,17 +18,10 @@ export type Cell = {
 export type Matrix = {
   rows: number;
   cols: number;
-  cells: Cell[][];
+  matrix: Cell[][];
 };
 
-export enum PieceType {
-  KING,
-  QUEEN,
-  BISHOP,
-  KNIGTH,
-  ROOK,
-  PAWN,
-}
+export {PieceType_ as PieceType};
 
 export type Vector2 = {
   x: number;
@@ -35,7 +29,7 @@ export type Vector2 = {
 };
 
 export type Ball = {
-  type: PieceType;
+  type: PieceType_;
   position: Vector2;
 };
 
@@ -46,7 +40,7 @@ export type Board = {
 };
 
 export type Piece = {
-  type: PieceType;
+  type: PieceType_;
   quantity: number;
   isActive: boolean;
 };

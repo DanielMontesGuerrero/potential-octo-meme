@@ -87,6 +87,8 @@ const Card = (props: CardProps) => {
         translateY.value = withSpring(0);
       } else {
         runOnJS(onReleaseWraper)();
+        translateX.value = 0;
+        translateY.value = 0;
       }
     },
   });

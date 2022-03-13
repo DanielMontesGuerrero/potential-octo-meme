@@ -47,12 +47,12 @@ function drawMatrix(ctx, setup: BoardSetup) {
     const color = getColorFromId(getIdFromCoords(j, i, setup.board.matrix));
     const [x, y] = mapCoords(j, i, setup);
     ctx.fillStyle = color.normal;
-    if (setup.board.matrix.cells[i][j].health < 50) {
+    if (setup.board.matrix.matrix[i][j].health < 50) {
       ctx.fillStyle = color.light;
     }
     ctx.strokeStyle = color.dark;
     ctx.strokeRect(x, y, width, height);
-    if (setup.board.matrix.cells[i][j].health > 0) {
+    if (setup.board.matrix.matrix[i][j].health > 0) {
       ctx.fillRect(x, y, width, height);
     }
   };

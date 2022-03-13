@@ -3,8 +3,9 @@ import Message from '../components/Message';
 import Roulette from '../components/Roulette';
 import Scoreboard from '../components/Scoreboard';
 import Board from '../components/board/Board';
-import {defaultPlayers, defaultState} from '../shared/defaultGameState';
+import GameHandler from '../game/GameHandler';
 import {PieceType} from '../shared/types';
+import {EventCode, GamePhase} from '@danielmontes/darkness/build/game/types';
 import {TEST_MODE} from '@env';
 import React, {useEffect, useState} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
@@ -29,113 +30,91 @@ const rouletteHeight = 3 * (cardsContainerHeight / 6);
 const cardsHeight = 3 * (cardsContainerHeight / 4);
 
 const Game = () => {
-  const [players, setPlayers] = useState(defaultPlayers);
-  const [state] = useState(defaultState);
+  const messageDelay = 500;
+  const playerId = 0;
+  const [gameHandler] = useState(new GameHandler());
+  const [message, setMessage] = useState('Starting game');
+  const [dummy, setDummy] = useState(true);
   const [rouletteActive, setRouletteActive] = useState(false);
   const [selectedRouletteOption, setSelectedRouletteOption] = useState(-1);
-  const [messageIndex, setMessageIndex] = useState(0);
+  const rouletteOptions = gameHandler.getRouletteOptions(playerId);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (gameHandler.game.phase === GamePhase.IDLE) {
+        gameHandler.start();
+      } else {
+        gameHandler.update();
+      }
+    }, 10);
+    const messagesInterval = setInterval(() => {
+      const nextMessage = gameHandler.getNextMessage(playerId);
+      if (nextMessage !== undefined) {
+        setMessage(nextMessage);
+      }
+    }, messageDelay);
+    return () => {
+      clearInterval(interval);
+      clearInterval(messagesInterval);
+    };
+  });
+
   const changeActive = (type: PieceType) => {
-    let prevIndex = 0;
-    let newIndex = 0;
-    for (let i = 0; i < players[0].hand.length; i++) {
-      if (players[0].hand[i].isActive) {
-        prevIndex = i;
-        break;
-      }
-    }
-    for (let i = 0; i < players[0].hand.length; i++) {
-      if (players[0].hand[i].type === type) {
-        newIndex = i;
-        break;
-      }
-    }
-    setPlayers(p => {
-      let newPlayers = JSON.parse(JSON.stringify(p));
-      newPlayers[0].hand[prevIndex].isActive = false;
-      newPlayers[0].hand[newIndex].isActive = true;
-      return newPlayers;
+    gameHandler.addEvent({
+      code: EventCode.CHANGED_ACTIVE_PIECE,
+      playerId,
+      newActivePiece: type,
     });
+    setDummy(!dummy);
   };
   const releasePiece = (type: PieceType) => {
-    const playersCopy = JSON.parse(JSON.stringify(players));
-    for (let i = 0; i < players[0].hand.length; i++) {
-      if (playersCopy[0].hand[i].type === type) {
-        playersCopy[0].hand[i].quantity = 0;
-        break;
-      }
-    }
-    setPlayers(playersCopy);
+    gameHandler.addEvent({
+      code: EventCode.RELEASED_PIECE,
+      playerId,
+      pieceType: type,
+    });
+    setDummy(!dummy);
   };
   const manageRoulette = () => {
+    gameHandler.addEvent({
+      code: EventCode.TRIGGERED_ROULETTE,
+      playerId,
+      triggeredAt: Date.now(),
+    });
     setRouletteActive(true);
-    setTimeout(() => {
-      manageRouletteSelectedOption();
-    }, 2500);
     setTimeout(() => {
       setRouletteActive(false);
       setSelectedRouletteOption(-1);
     }, 3000);
   };
-  const manageRouletteSelectedOption = () => {
-    const value = Math.floor(Math.random() * state.options.length);
-    setSelectedRouletteOption(value);
-  };
-  useEffect(() => {
-    const intervalMessage = setInterval(() => {
-      setMessageIndex((messageIndex + 1) % state.messages.length);
-    }, 9000);
-    const intervalScoreboard = setInterval(() => {
-      const index = Math.round(Math.random() * 3);
-      const value = Math.round(Math.random() * 10);
-      players[index].score += value;
-    }, 800);
-    const intervalBoard = setInterval(() => {
-      for (let i = 0; i < 4; i++) {
-        state.board.arrows[i].angle += 0.01;
-        if (state.board.arrows[i].angle > 2 * Math.PI) {
-          state.board.arrows[i].angle -= 2 * Math.PI;
-        }
-      }
-      for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < state.board.balls[i].length; j++) {
-          state.board.balls[i][j].position.x += 0.01;
-          if (state.board.balls[i][j].position.x > 10) {
-            state.board.balls[i][j].position.x -= 10;
-          }
-          state.board.balls[i][j].position.y += 0.01;
-          if (state.board.balls[i][j].position.y > 10) {
-            state.board.balls[i][j].position.y -= 10;
-          }
-        }
-      }
-    }, 10);
-    return () => {
-      clearInterval(intervalMessage);
-      clearInterval(intervalScoreboard);
-      clearInterval(intervalBoard);
-    };
-  });
 
   return (
     <>
       <View style={styles.messageContainer}>
-        <Message message={state.messages[messageIndex]} />
+        <Message message={message} />
       </View>
       <View style={styles.scoreContainer}>
-        <Scoreboard players={players} beginTime={state.beginTime} />
+        <Scoreboard
+          players={gameHandler.getPlayers()}
+          beginTime={gameHandler.getBeginTime() / 1000}
+        />
       </View>
       <View style={styles.boardContainer}>
         {TEST_MODE === 'UI' ? (
           <View style={styles.boardTestBox} />
         ) : (
-          <Board width={boardSize} height={boardSize} board={state.board} />
+          <Board
+            width={boardSize}
+            height={boardSize}
+            board={gameHandler.getBoard()}
+          />
         )}
       </View>
       <View style={styles.bottomContainer}>
         <View style={styles.cardsContainer}>
           <CardBox
             height={cardsHeight}
-            hand={players[0].hand}
+            hand={gameHandler.getPlayers()[playerId].hand}
             onActiveChanged={type => changeActive(type)}
             onPieceReleased={type => releasePiece(type)}
           />
@@ -144,7 +123,7 @@ const Game = () => {
           <Roulette
             width={rouletteHeight}
             height={rouletteHeight}
-            options={state.options}
+            options={rouletteOptions}
             active={rouletteActive}
             onPress={manageRoulette}
             selectedOption={selectedRouletteOption}
@@ -168,6 +147,8 @@ const styles = StyleSheet.create({
   boardContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
+    width: boardSize,
+    height: boardSize,
   },
   bottomContainer: {
     flex: flexContainersSize.bottomContainer,

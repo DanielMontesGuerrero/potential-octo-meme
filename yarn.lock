@@ -1268,6 +1268,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@danielmontes/darkness@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@danielmontes/darkness/-/darkness-1.0.0.tgz#8ce4f64154b5cdd1edc3e122618634963b37583d"
+  integrity sha512-0qmDF6l5lfAFQtfMeSZlPNpvKAmJbNhVMXbi2TQzO3YjCPp5Z/k6lTw+iNaQwvkbUT20oJflroYtGKwiFVMAMg==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"

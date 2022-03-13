@@ -1,3 +1,4 @@
+import ColorSchema from '../../assets/ColorSchema';
 import DefaultStyles from '../shared/styles';
 import {Player} from '../shared/types';
 import {secondsSinceEpoch} from '../shared/utils';
@@ -10,11 +11,26 @@ type ScoreboardProps = {
   beginTime: number;
 };
 
+function getColorFromPlayerId(id: number) {
+  switch (id) {
+    case 0:
+      return ColorSchema.green.normal;
+    case 1:
+      return ColorSchema.yellow.normal;
+    case 2:
+      return ColorSchema.blue.normal;
+    case 3:
+      return ColorSchema.red.normal;
+    default:
+      return ColorSchema.purple.normal;
+  }
+}
+
 function playerItem(player: Player, index: number) {
   return (
     <View style={styles.listItem} key={index}>
       <Svg height="10" width="10" style={styles.playerIcon}>
-        <Circle cx="5" cy="5" r="5" fill={player.color} />
+        <Circle cx="5" cy="5" r="5" fill={getColorFromPlayerId(player.id)} />
       </Svg>
       <Text
         style={
