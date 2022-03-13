@@ -46,6 +46,10 @@ export default class GameHandler {
     return this.game.beginTime;
   }
 
+  getEndTime() {
+    return this.game.endTime;
+  }
+
   getPlayers() {
     return this.game.players;
   }

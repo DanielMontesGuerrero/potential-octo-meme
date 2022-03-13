@@ -96,7 +96,8 @@ const Game = () => {
       <View style={styles.scoreContainer}>
         <Scoreboard
           players={gameHandler.getPlayers()}
-          beginTime={gameHandler.getBeginTime() / 1000}
+          beginTime={gameHandler.getBeginTime()}
+          endTime={gameHandler.getEndTime()}
         />
       </View>
       <View style={styles.boardContainer}>

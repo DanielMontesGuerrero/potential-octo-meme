@@ -9,6 +9,7 @@ import Svg, {Circle} from 'react-native-svg';
 type ScoreboardProps = {
   players: Player[];
   beginTime: number;
+  endTime: number;
 };
 
 function getColorFromPlayerId(id: number) {
@@ -56,7 +57,9 @@ const Scoreboard = (props: ScoreboardProps) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMatchTime(Math.round(secondsSinceEpoch() - props.beginTime));
+      const currentTime =
+        props.endTime !== 0 ? props.endTime : secondsSinceEpoch() * 1000;
+      setMatchTime(Math.round((currentTime - props.beginTime) / 1000));
     }, 500);
     return () => clearInterval(interval);
   });
