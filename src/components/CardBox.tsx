@@ -53,7 +53,7 @@ function getIcon(type: PieceType, length: number) {
       return <QueenIcon width={length} height={length} />;
     case PieceType.BISHOP:
       return <BishopIcon width={length} height={length} />;
-    case PieceType.KNIGTH:
+    case PieceType.KNIGHT:
       return <KnigthIcon width={length} height={length} />;
     case PieceType.ROOK:
       return <RookIcon width={length} height={length} />;
