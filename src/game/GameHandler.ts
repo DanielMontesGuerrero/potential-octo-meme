@@ -23,7 +23,7 @@ export default class GameHandler {
   getNextMessage(playerId: number) {
     const message = this.game.players[playerId].messageManager.messages.shift();
     if (message !== undefined) {
-      return message.content;
+      return message;
     }
     return undefined;
   }

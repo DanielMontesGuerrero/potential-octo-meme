@@ -4,7 +4,7 @@ import Roulette from '../components/Roulette';
 import Scoreboard from '../components/Scoreboard';
 import Board from '../components/board/Board';
 import GameHandler from '../game/GameHandler';
-import {PieceType} from '../shared/types';
+import {PieceType, MessageType} from '../shared/types';
 import {EventCode, GamePhase} from '@danielmontes/darkness/build/game/types';
 import {TEST_MODE} from '@env';
 import React, {useEffect, useState} from 'react';
@@ -33,7 +33,10 @@ const Game = () => {
   const messageDelay = 500;
   const playerId = 0;
   const [gameHandler] = useState(new GameHandler());
-  const [message, setMessage] = useState('Starting game');
+  const [message, setMessage] = useState({
+    content: 'Starting game',
+    type: MessageType.INFO,
+  });
   const [dummy, setDummy] = useState(true);
   const [rouletteActive, setRouletteActive] = useState(false);
   const [selectedRouletteOption, setSelectedRouletteOption] = useState(-1);

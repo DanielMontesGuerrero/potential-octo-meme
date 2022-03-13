@@ -1,32 +1,54 @@
 import ColorSchema from '../../assets/ColorSchema';
 import DefaultStyles from '../shared/styles';
+import {Message as MessagePropType, MessageType} from '../shared/types';
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 
 type MessageProps = {
-  message: string;
+  message: MessagePropType;
 };
 
 const defaultProps = {
-  message: '',
+  message: {
+    content: '',
+    type: MessageType.INFO,
+  },
+};
+
+const getGradientColorFromType = (type: MessageType) => {
+  switch (type) {
+    case MessageType.WIN:
+      return ['#C4A90C', '#C4A90C', '#F4D63E', '#F4D63E', '#AE920A', '#AE920A'];
+    case MessageType.LOSE:
+      return ['#8A0AAD', '#8A0AAD', '#C218F2', '#C218F2', '#6B0887', '#6B0887'];
+    case MessageType.DEAD_PLAYER:
+      return ['#2E2E3E', '#2E2E3E', '#575775', '#575775', '#23232f', '#23232f'];
+    case MessageType.WARNING:
+      return ['#9A480A', '#9A480A', '#E66C0F', '#E66C0F', '#733607', '#733607'];
+    case MessageType.INFO:
+    default:
+      return [
+        ColorSchema.purple.normal,
+        ColorSchema.purple.normal,
+        ColorSchema.purple.light,
+        ColorSchema.purple.light,
+        ColorSchema.purple.dark,
+        ColorSchema.purple.dark,
+      ];
+  }
 };
 
 const Message = (props: MessageProps) => {
-  const gradientColors = [
-    ColorSchema.purple.normal,
-    ColorSchema.purple.normal,
-    ColorSchema.purple.light,
-    ColorSchema.purple.light,
-    ColorSchema.purple.dark,
-    ColorSchema.purple.dark,
-  ];
   const gradientLocations = [0.75, 0.75, 0.75, 0.85, 0.85, 1];
   const view = useRef<any>(null);
   const animationDuration = 1000;
   const animationGap = 1000;
   const [displayedMessage, setDisplayedMessage] = useState('');
+  const [gradientColors, setGradientColors] = useState(
+    getGradientColorFromType(MessageType.INFO),
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,7 +58,8 @@ const Message = (props: MessageProps) => {
   });
   useEffect(() => {
     view?.current?.bounceOutRight(animationDuration).then(() => {
-      setDisplayedMessage(props.message);
+      setDisplayedMessage(props.message.content);
+      setGradientColors(getGradientColorFromType(props.message.type));
       view?.current?.bounceInLeft(animationDuration);
     });
   }, [props.message]);

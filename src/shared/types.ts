@@ -1,4 +1,7 @@
-import {PieceType as PieceType_} from '@danielmontes/darkness/build/game/types';
+import {
+  PieceType as PieceType_,
+  MessageType as MessageType_,
+} from '@danielmontes/darkness/build/game/types';
 
 export type Arrow = {
   angle: number;
@@ -44,4 +47,11 @@ export type Piece = {
   type: PieceType_;
   quantity: number;
   isActive: boolean;
+};
+
+export {MessageType_ as MessageType};
+
+export type Message = {
+  content: string;
+  type: MessageType_;
 };
