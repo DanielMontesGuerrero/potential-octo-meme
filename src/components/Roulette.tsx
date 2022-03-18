@@ -97,12 +97,14 @@ const styles = StyleSheet.create({
   },
   rouletteViewText: {
     textAlign: 'center',
+    textAlignVertical: 'center',
     fontStyle: 'italic',
     fontWeight: 'bold',
     fontSize: 30,
     backgroundColor: ColorSchema.background.dark,
     padding: 10,
     width: Dimensions.get('window').width / 2,
+    height: Dimensions.get('window').width / 4,
   },
   optionsContainer: {
     alignItems: 'center',

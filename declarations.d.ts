@@ -5,4 +5,6 @@ declare module '*.svg' {
   export default content;
 }
 
+declare module '@env';
+
 declare module '@flyskywhy/react-native-gcanvas';

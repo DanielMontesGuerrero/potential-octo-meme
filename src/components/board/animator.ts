@@ -1,10 +1,11 @@
 import ColorSchema from '../../../assets/ColorSchema';
-import {Matrix, Board, Arrow} from '../../shared/types';
+import {Matrix, Board, Arrow, Player} from '../../shared/types';
 
 type BoardSetup = {
   width: number;
   height: number;
   board: Board;
+  players: Player[];
 };
 
 type Color = {
@@ -47,12 +48,12 @@ function drawMatrix(ctx, setup: BoardSetup) {
     const color = getColorFromId(getIdFromCoords(j, i, setup.board.matrix));
     const [x, y] = mapCoords(j, i, setup);
     ctx.fillStyle = color.normal;
-    if (setup.board.matrix.cells[i][j].health < 50) {
+    if (setup.board.matrix.matrix[i][j].health < 50) {
       ctx.fillStyle = color.light;
     }
     ctx.strokeStyle = color.dark;
     ctx.strokeRect(x, y, width, height);
-    if (setup.board.matrix.cells[i][j].health > 0) {
+    if (setup.board.matrix.matrix[i][j].health > 0) {
       ctx.fillRect(x, y, width, height);
     }
   };
@@ -65,6 +66,9 @@ function drawMatrix(ctx, setup: BoardSetup) {
 
 function drawArrows(ctx, setup: BoardSetup) {
   const drawArrow = (playerId: number, arrow: Arrow) => {
+    if (setup.players[playerId].isDead) {
+      return;
+    }
     let x0, y0, x1, y1;
     const arrowLength = 0.7;
     const headlen = 5;
