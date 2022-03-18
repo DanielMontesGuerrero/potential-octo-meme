@@ -47,13 +47,9 @@ const Scoreboard = (props: ScoreboardProps) => {
   const minutes = Math.floor(matchTime / 60)
     .toString()
     .padStart(2, '0');
-  const playerList = props.players
-    .sort((a, b) => {
-      return b.score - a.score;
-    })
-    .map((item, index) => {
-      return playerItem(item, index);
-    });
+  const playerList = props.players.map((item, index) => {
+    return playerItem(item, index);
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {

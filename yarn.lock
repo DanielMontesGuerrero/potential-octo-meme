@@ -1269,9 +1269,9 @@
     minimist "^1.2.0"
 
 "@danielmontes/darkness@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@danielmontes/darkness/-/darkness-1.0.0.tgz#8ce4f64154b5cdd1edc3e122618634963b37583d"
-  integrity sha512-0qmDF6l5lfAFQtfMeSZlPNpvKAmJbNhVMXbi2TQzO3YjCPp5Z/k6lTw+iNaQwvkbUT20oJflroYtGKwiFVMAMg==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@danielmontes/darkness/-/darkness-1.1.0.tgz#65c2ed4727cf2a8326318cd843a15063289c2b20"
+  integrity sha512-OIM1dWYZl3k9QiOgyPqwaen49kk4AgrYzN0+pm5A/scSShyAzuCJJgevWQPFhdfZZ/SGcV8HPNZMQTFPsKWS4w==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
