@@ -7,6 +7,7 @@
     "ios": "npx react-native run-ios",
     "start": "npx react-native start",
     "test": "jest",
+    "format": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "@flyskywhy/react-native-gcanvas": "^2.3.12",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
+    "color-interpolate": "^1.0.5",
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-animatable": "^1.3.3",

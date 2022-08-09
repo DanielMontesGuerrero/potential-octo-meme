@@ -1,5 +1,6 @@
 import ColorSchema from '../../../assets/ColorSchema';
 import {Matrix, Board, Arrow, Player} from '../../shared/types';
+import interpolate from 'color-interpolate';
 
 type BoardSetup = {
   width: number;
@@ -13,6 +14,49 @@ type Color = {
   normal: string;
   dark: string;
 };
+
+const colorsMap = new Map([
+  [
+    0,
+    interpolate([
+      ColorSchema.green.extralight,
+      ColorSchema.green.light,
+      ColorSchema.green.normal,
+    ]),
+  ],
+  [
+    1,
+    interpolate([
+      ColorSchema.yellow.extralight,
+      ColorSchema.yellow.light,
+      ColorSchema.yellow.normal,
+    ]),
+  ],
+  [
+    2,
+    interpolate([
+      ColorSchema.blue.extralight,
+      ColorSchema.blue.light,
+      ColorSchema.blue.normal,
+    ]),
+  ],
+  [
+    3,
+    interpolate([
+      ColorSchema.red.extralight,
+      ColorSchema.red.light,
+      ColorSchema.red.normal,
+    ]),
+  ],
+]);
+
+function getCellColor(id: number, health: number) {
+  let colormap = colorsMap.get(id);
+  if (colormap === undefined) {
+    return ColorSchema.background.normal;
+  }
+  return colormap(health / 100);
+}
 
 function getIdFromCoords(x: number, y: number, matrix: Matrix) {
   const rowSide = y >= matrix.rows / 2;
@@ -45,12 +89,13 @@ function drawMatrix(ctx, setup: BoardSetup) {
   const width = setup.width / setup.board.matrix.cols;
   const height = setup.height / setup.board.matrix.rows;
   const drawCell = (i: number, j: number) => {
+    const cellColor = getCellColor(
+      getIdFromCoords(j, i, setup.board.matrix),
+      setup.board.matrix.get(i, j).health,
+    );
     const color = getColorFromId(getIdFromCoords(j, i, setup.board.matrix));
     const [x, y] = mapCoords(j, i, setup);
-    ctx.fillStyle = color.normal;
-    if (setup.board.matrix.matrix[i][j].health < 50) {
-      ctx.fillStyle = color.light;
-    }
+    ctx.fillStyle = cellColor;
     ctx.strokeStyle = color.dark;
     ctx.strokeRect(x, y, width, height);
     if (setup.board.matrix.matrix[i][j].health > 0) {
