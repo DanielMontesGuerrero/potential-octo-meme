@@ -42,7 +42,7 @@ export default class GameHandler {
   }
 
   getNextMessage(playerId: number) {
-    const message = this.game.players[playerId].messageManager.messages.shift();
+    const message = this.game.getNextMessage(playerId);
     if (message !== undefined) {
       return message;
     }
@@ -81,5 +81,9 @@ export default class GameHandler {
 
   getRouletteSelectedOption(playerId: number) {
     return this.game.players[playerId].roulette.selectedOption;
+  }
+
+  isPlayerDead(playerId: number) {
+    return this.game.players[playerId].isDead;
   }
 }

@@ -30,12 +30,12 @@ const rouletteHeight = 3 * (cardsContainerHeight / 6);
 const cardsHeight = 3 * (cardsContainerHeight / 4);
 
 const Game = () => {
-  const messageDelay = 500;
+  const messageDelay = 250;
   const playerId = 0;
   const gameUpdateRate = 10;
   const botActionsRate = 500;
-  const rouletteSelectionTime = 1500;
-  const rouletteSelectedShowTime = 1000;
+  const rouletteSelectionTime = 500;
+  const rouletteSelectedShowTime = 100;
   const [gameHandler] = useState(new GameHandler());
   const [message, setMessage] = useState({
     content: 'Starting game',
@@ -87,7 +87,10 @@ const Game = () => {
     setDummy(!dummy);
   };
   const manageRoulette = () => {
-    if (gameHandler.game.phase === GamePhase.FINISHED) {
+    if (
+      gameHandler.game.phase === GamePhase.FINISHED ||
+      gameHandler.isPlayerDead(playerId)
+    ) {
       return;
     }
     gameHandler.addEvent({
