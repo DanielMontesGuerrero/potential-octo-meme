@@ -30,8 +30,12 @@ const rouletteHeight = 3 * (cardsContainerHeight / 6);
 const cardsHeight = 3 * (cardsContainerHeight / 4);
 
 const Game = () => {
-  const messageDelay = 500;
+  const messageDelay = 250;
   const playerId = 0;
+  const gameUpdateRate = 10;
+  const botActionsRate = 500;
+  const rouletteSelectionTime = 500;
+  const rouletteSelectedShowTime = 100;
   const [gameHandler] = useState(new GameHandler());
   const [message, setMessage] = useState({
     content: 'Starting game',
@@ -49,16 +53,20 @@ const Game = () => {
       } else {
         gameHandler.update();
       }
-    }, 10);
+    }, gameUpdateRate);
     const messagesInterval = setInterval(() => {
       const nextMessage = gameHandler.getNextMessage(playerId);
       if (nextMessage !== undefined) {
         setMessage(nextMessage);
       }
     }, messageDelay);
+    const botsInterval = setInterval(() => {
+      gameHandler.botActions();
+    }, botActionsRate);
     return () => {
       clearInterval(interval);
       clearInterval(messagesInterval);
+      clearInterval(botsInterval);
     };
   });
 
@@ -79,7 +87,10 @@ const Game = () => {
     setDummy(!dummy);
   };
   const manageRoulette = () => {
-    if (gameHandler.game.phase === GamePhase.FINISHED) {
+    if (
+      gameHandler.game.phase === GamePhase.FINISHED ||
+      gameHandler.isPlayerDead(playerId)
+    ) {
       return;
     }
     gameHandler.addEvent({
@@ -89,9 +100,18 @@ const Game = () => {
     });
     setRouletteActive(true);
     setTimeout(() => {
-      setRouletteActive(false);
-      setSelectedRouletteOption(-1);
-    }, 3000);
+      setSelectedRouletteOption(
+        gameHandler.getRouletteSelectedOption(playerId),
+      );
+      gameHandler.addEvent({
+        code: EventCode.ACKNOWLEDGED_ROULETTE,
+        playerId,
+      });
+      setTimeout(() => {
+        setRouletteActive(false);
+        setSelectedRouletteOption(-1);
+      }, rouletteSelectedShowTime);
+    }, rouletteSelectionTime);
   };
 
   return (
@@ -101,7 +121,7 @@ const Game = () => {
       </View>
       <View style={styles.scoreContainer}>
         <Scoreboard
-          players={gameHandler.getPlayers()}
+          players={gameHandler.getPlayersOrderedByScore()}
           beginTime={gameHandler.getBeginTime()}
           endTime={gameHandler.getEndTime()}
         />

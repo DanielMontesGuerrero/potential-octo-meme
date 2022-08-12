@@ -1,11 +1,23 @@
 import Game from '@danielmontes/darkness';
 import {EnqueuedEvent} from '@danielmontes/darkness/build/game/Event';
+import BehaviourTree from '@danielmontes/darkness/build/game/bot/BehaviorTree';
+import createBehaviorTree from '@danielmontes/darkness/build/game/bot/BehaviourTreeFactoty';
+import {GamePhase} from '@danielmontes/darkness/build/game/types';
 
 export default class GameHandler {
   game: Game;
+  behaviorTrees: BehaviourTree[];
 
   constructor() {
     this.game = new Game(['Player 1']);
+    this.behaviorTrees = [
+      createBehaviorTree('atack'),
+      createBehaviorTree('random'),
+      createBehaviorTree('defense'),
+    ];
+    for (let id = 1; id < 4; id++) {
+      this.behaviorTrees[id - 1].bind(this.game, id);
+    }
   }
 
   start() {
@@ -13,6 +25,7 @@ export default class GameHandler {
   }
 
   update() {
+    this.botActions();
     this.game.update();
   }
 
@@ -20,8 +33,16 @@ export default class GameHandler {
     this.game.stop();
   }
 
+  botActions() {
+    if (this.game.phase === GamePhase.RUNNING) {
+      this.behaviorTrees.forEach(tree => {
+        tree.nextAction();
+      });
+    }
+  }
+
   getNextMessage(playerId: number) {
-    const message = this.game.players[playerId].messageManager.messages.shift();
+    const message = this.game.getNextMessage(playerId);
     if (message !== undefined) {
       return message;
     }
@@ -52,5 +73,17 @@ export default class GameHandler {
 
   getPlayers() {
     return this.game.players;
+  }
+
+  getPlayersOrderedByScore() {
+    return this.game.getPlayersOrderedByScore();
+  }
+
+  getRouletteSelectedOption(playerId: number) {
+    return this.game.players[playerId].roulette.selectedOption;
+  }
+
+  isPlayerDead(playerId: number) {
+    return this.game.players[playerId].isDead;
   }
 }
