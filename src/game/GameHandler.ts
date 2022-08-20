@@ -43,10 +43,7 @@ export default class GameHandler {
 
   getNextMessage(playerId: number) {
     const message = this.game.getNextMessage(playerId);
-    if (message !== undefined) {
-      return message;
-    }
-    return undefined;
+    return message;
   }
 
   getRouletteOptions(playerId: number) {

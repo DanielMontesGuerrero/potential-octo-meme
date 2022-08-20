@@ -33,7 +33,6 @@ const Game = () => {
   const messageDelay = 250;
   const playerId = 0;
   const gameUpdateRate = 10;
-  const botActionsRate = 500;
   const rouletteSelectionTime = 500;
   const rouletteSelectedShowTime = 100;
   const [gameHandler] = useState(new GameHandler());
@@ -60,13 +59,9 @@ const Game = () => {
         setMessage(nextMessage);
       }
     }, messageDelay);
-    const botsInterval = setInterval(() => {
-      gameHandler.botActions();
-    }, botActionsRate);
     return () => {
       clearInterval(interval);
       clearInterval(messagesInterval);
-      clearInterval(botsInterval);
     };
   });
 
