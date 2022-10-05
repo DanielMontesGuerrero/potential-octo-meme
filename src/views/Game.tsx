@@ -4,11 +4,19 @@ import Roulette from '../components/Roulette';
 import Scoreboard from '../components/Scoreboard';
 import Board from '../components/board/Board';
 import GameHandler from '../game/GameHandler';
-import {PieceType, MessageType} from '../shared/types';
-import {EventCode, GamePhase} from '@danielmontes/darkness/build/game/types';
+import {ConnectionEvents, ErrorCodes} from '../shared/connectionTypes';
+import DefaultStyles from '../shared/styles';
+import {
+  PieceType,
+  MessageType,
+  EventCode,
+  GamePhase,
+  IGameState,
+} from '../shared/types';
 import {TEST_MODE} from '@env';
-import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {io, Socket} from 'socket.io-client';
 
 const boardSize =
   Dimensions.get('window').width >= Dimensions.get('window').height
@@ -30,12 +38,20 @@ const rouletteHeight = 3 * (cardsContainerHeight / 6);
 const cardsHeight = 3 * (cardsContainerHeight / 4);
 
 const Game = () => {
+  const token = 'token123';
+  const host = 'ws://192.168.0.40:3000';
+  const mode = 'ONLINE';
+  // const mode = 'OFFLINE';
+  const playerName = 'Player 1';
   const messageDelay = 250;
   const playerId = 0;
   const gameUpdateRate = 10;
   const rouletteSelectionTime = 500;
   const rouletteSelectedShowTime = 100;
-  const [gameHandler] = useState(new GameHandler());
+  const refreshRate = 1000;
+  const socket = useRef<Socket>();
+  const isConnected = useRef<boolean>(false);
+  const [gameHandler] = useState(new GameHandler(playerName, mode, socket));
   const [message, setMessage] = useState({
     content: 'Starting game',
     type: MessageType.INFO,
@@ -43,25 +59,120 @@ const Game = () => {
   const [dummy, setDummy] = useState(true);
   const [rouletteActive, setRouletteActive] = useState(false);
   const [selectedRouletteOption, setSelectedRouletteOption] = useState(-1);
-  const rouletteOptions = gameHandler.getRouletteOptions(playerId);
+  const [gameReady, setGameReady] = useState(false);
+  const [rouletteOptions, setRouletteOptions] = useState(
+    gameHandler.getRouletteOptions(),
+  );
+
+  const [playersOrderedByScore, setPlayersOrdered] = useState(
+    gameHandler.getPlayersOrderedByScore(),
+  );
+
+  const updateGame = useCallback(
+    (state: IGameState) => {
+      setGameReady(true);
+      gameHandler.setGameState(state);
+    },
+    [gameHandler],
+  );
+
+  const logSocketError = (
+    result: boolean,
+    errorCode: ErrorCodes,
+    errorDescription: string,
+  ) => {
+    if (!result) {
+      console.log('Not joined match', errorCode, errorDescription);
+    }
+  };
+
+  const updateGameStateRequestLoop = useCallback(() => {
+    if (isConnected.current) {
+      socket.current?.emit(ConnectionEvents.GET_STATE_REQUEST, logSocketError);
+    }
+    requestAnimationFrame(() => updateGameStateRequestLoop());
+  }, []);
+
+  const setPlayerId = useCallback(
+    (id: number) => {
+      gameHandler.setPlayerId(id);
+    },
+    [gameHandler],
+  );
+
+  useEffect(() => {
+    if (mode !== 'ONLINE') {
+      setGameReady(true);
+      return;
+    }
+    socket.current = io(host);
+    socket.current?.on('connect', () => {
+      console.log('Connected');
+      socket.current?.emit(
+        ConnectionEvents.PLAYER_JOINED,
+        {
+          name: playerName,
+          token,
+        },
+        logSocketError,
+      );
+    });
+    socket.current?.on(ConnectionEvents.CONNECTION_ACCEPTED, id => {
+      setPlayerId(id);
+      isConnected.current = true;
+    });
+
+    socket.current?.on(ConnectionEvents.COUNTDOWN, count => {
+      console.log(count);
+    });
+
+    socket.current?.on(ConnectionEvents.STATE_UPDATE, state => {
+      updateGame(state);
+    });
+
+    socket.current?.on(ConnectionEvents.GAME_FINISHED, () => {
+      console.log('Game finished');
+    });
+
+    socket.current?.on('reconnect', () => {
+      console.log('reconnect');
+    });
+
+    socket.current?.on('close', () => {
+      console.log('disconnected');
+    });
+
+    updateGameStateRequestLoop();
+    return () => {
+      socket.current?.disconnect();
+    };
+  }, [host, updateGame, updateGameStateRequestLoop, setPlayerId]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (gameHandler.game.phase === GamePhase.IDLE) {
+      if (gameHandler.getGamePhase() === GamePhase.IDLE) {
         gameHandler.start();
       } else {
         gameHandler.update();
       }
     }, gameUpdateRate);
     const messagesInterval = setInterval(() => {
-      const nextMessage = gameHandler.getNextMessage(playerId);
-      if (nextMessage !== undefined) {
+      const nextMessage = gameHandler.getNextMessage();
+      if (
+        nextMessage !== undefined &&
+        nextMessage.content !== message.content
+      ) {
         setMessage(nextMessage);
       }
     }, messageDelay);
+    const refreshStateInterval = setInterval(() => {
+      setRouletteOptions(gameHandler.getRouletteOptions());
+      setPlayersOrdered(gameHandler.getPlayersOrderedByScore());
+    }, refreshRate);
     return () => {
       clearInterval(interval);
       clearInterval(messagesInterval);
+      clearInterval(refreshStateInterval);
     };
   });
 
@@ -83,8 +194,8 @@ const Game = () => {
   };
   const manageRoulette = () => {
     if (
-      gameHandler.game.phase === GamePhase.FINISHED ||
-      gameHandler.isPlayerDead(playerId)
+      gameHandler.getGamePhase() !== GamePhase.RUNNING ||
+      gameHandler.isPlayerDead()
     ) {
       return;
     }
@@ -95,9 +206,7 @@ const Game = () => {
     });
     setRouletteActive(true);
     setTimeout(() => {
-      setSelectedRouletteOption(
-        gameHandler.getRouletteSelectedOption(playerId),
-      );
+      setSelectedRouletteOption(gameHandler.getRouletteSelectedOption());
       gameHandler.addEvent({
         code: EventCode.ACKNOWLEDGED_ROULETTE,
         playerId,
@@ -111,48 +220,56 @@ const Game = () => {
 
   return (
     <>
-      <View style={styles.messageContainer}>
-        <Message message={message} />
-      </View>
-      <View style={styles.scoreContainer}>
-        <Scoreboard
-          players={gameHandler.getPlayersOrderedByScore()}
-          beginTime={gameHandler.getBeginTime()}
-          endTime={gameHandler.getEndTime()}
-        />
-      </View>
-      <View style={styles.boardContainer}>
-        {TEST_MODE === 'UI' ? (
-          <View style={styles.boardTestBox} />
-        ) : (
-          <Board
-            width={boardSize}
-            height={boardSize}
-            board={gameHandler.getBoard()}
-            players={gameHandler.getPlayers()}
-          />
-        )}
-      </View>
-      <View style={styles.bottomContainer}>
-        <View style={styles.cardsContainer}>
-          <CardBox
-            height={cardsHeight}
-            hand={gameHandler.getPlayers()[playerId].hand}
-            onActiveChanged={type => changeActive(type)}
-            onPieceReleased={type => releasePiece(type)}
-          />
+      {!gameReady ? (
+        <View style={DefaultStyles.centeredContainer}>
+          <Text>Connecting...</Text>
         </View>
-        <View style={styles.rouletteContainer}>
-          <Roulette
-            width={rouletteHeight}
-            height={rouletteHeight}
-            options={rouletteOptions}
-            active={rouletteActive}
-            onPress={manageRoulette}
-            selectedOption={selectedRouletteOption}
-          />
-        </View>
-      </View>
+      ) : (
+        <>
+          <View style={styles.messageContainer}>
+            <Message message={message} />
+          </View>
+          <View style={styles.scoreContainer}>
+            <Scoreboard
+              players={playersOrderedByScore}
+              beginTime={gameHandler.getBeginTime()}
+              endTime={gameHandler.getEndTime()}
+            />
+          </View>
+          <View style={styles.boardContainer}>
+            {TEST_MODE === 'UI' ? (
+              <View style={styles.boardTestBox} />
+            ) : (
+              <Board
+                width={boardSize}
+                height={boardSize}
+                board={gameHandler.getBoard()}
+                players={gameHandler.getPlayers()}
+              />
+            )}
+          </View>
+          <View style={styles.bottomContainer}>
+            <View style={styles.cardsContainer}>
+              <CardBox
+                height={cardsHeight}
+                hand={gameHandler.getPlayers()[playerId].hand}
+                onActiveChanged={type => changeActive(type)}
+                onPieceReleased={type => releasePiece(type)}
+              />
+            </View>
+            <View style={styles.rouletteContainer}>
+              <Roulette
+                width={rouletteHeight}
+                height={rouletteHeight}
+                options={rouletteOptions}
+                active={rouletteActive}
+                onPress={manageRoulette}
+                selectedOption={selectedRouletteOption}
+              />
+            </View>
+          </View>
+        </>
+      )}
     </>
   );
 };
