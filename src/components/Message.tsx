@@ -1,13 +1,13 @@
 import ColorSchema from '../../assets/ColorSchema';
 import DefaultStyles from '../shared/styles';
-import {Message as MessagePropType, MessageType} from '../shared/types';
+import {IMessage, MessageType} from '../shared/types';
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 
 type MessageProps = {
-  message: MessagePropType;
+  message: IMessage;
 };
 
 const defaultProps = {

@@ -6,7 +6,7 @@ import PawnIcon from '../../assets/pawn.svg';
 import QueenIcon from '../../assets/queen.svg';
 import RookIcon from '../../assets/rook.svg';
 import DefaultStyles from '../shared/styles';
-import {Piece, PieceType} from '../shared/types';
+import {IPiece, PieceType} from '../shared/types';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   GestureResponderEvent,
@@ -129,7 +129,7 @@ const Card = (props: CardProps) => {
 
 type CardBoxProps = {
   height: number;
-  hand: Piece[];
+  hand: IPiece[];
   onActiveChanged: (type: PieceType) => void;
   onPieceReleased: (type: PieceType) => void;
   iconSize: number;
@@ -145,7 +145,7 @@ const CardBox = (props: CardBoxProps) => {
   };
   const [, setDummy] = useState(true);
   const getPropsFromPiece = useCallback(
-    (piece: Piece) => {
+    (piece: IPiece) => {
       return {
         ...piece,
         length: props.iconSize,

@@ -1,49 +1,52 @@
 import {
   PieceType as PieceType_,
   MessageType as MessageType_,
+  GamePhase as GamePhase_,
+  EventCode as EventCode_,
 } from '@danielmontes/darkness/build/game/types';
 
-export type Arrow = {
+export type IArrow = {
   angle: number;
 };
 
-export type Player = {
+export type IPlayer = {
   id: number;
   name: string;
   score: number;
-  hand: Piece[];
+  hand: IPiece[];
   isDead: boolean;
+  message?: IMessage;
 };
 
-export type Cell = {
+export type ICell = {
   health: number;
 };
 
-export type Matrix = {
+export type IMatrix = {
   rows: number;
   cols: number;
-  matrix: Cell[][];
+  matrix: ICell[][];
 };
 
 export {PieceType_ as PieceType};
 
-export type Vector2 = {
+export type IVector2 = {
   x: number;
   y: number;
 };
 
-export type Ball = {
+export type IBall = {
   type: PieceType_;
-  position: Vector2;
+  position: IVector2;
 };
 
-export type Board = {
-  matrix: Matrix;
-  balls: Ball[][];
-  arrows: Arrow[];
+export type IBoard = {
+  matrix: IMatrix;
+  balls: IBall[][];
+  arrows: IArrow[];
 };
 
-export type Piece = {
+export type IPiece = {
   type: PieceType_;
   quantity: number;
   isActive: boolean;
@@ -51,7 +54,25 @@ export type Piece = {
 
 export {MessageType_ as MessageType};
 
-export type Message = {
+export type IMessage = {
   content: string;
   type: MessageType_;
 };
+
+export interface IGameInfo {
+  beginTime: number;
+  endTime: number;
+  phase: GamePhase_;
+}
+
+export interface IGameState {
+  players: IPlayer[];
+  gameInfo: IGameInfo;
+  board: IBoard;
+  rouletteOptions: string[][];
+  rouletteSelectedOptions: number[];
+}
+
+export {GamePhase_ as GamePhase};
+
+export {EventCode_ as EventCode};

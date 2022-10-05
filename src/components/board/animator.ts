@@ -1,12 +1,12 @@
 import ColorSchema from '../../../assets/ColorSchema';
-import {Matrix, Board, Arrow, Player} from '../../shared/types';
+import {IMatrix, IBoard, IArrow, IPlayer} from '../../shared/types';
 import interpolate from 'color-interpolate';
 
 type BoardSetup = {
   width: number;
   height: number;
-  board: Board;
-  players: Player[];
+  board: IBoard;
+  players: IPlayer[];
 };
 
 type Color = {
@@ -58,7 +58,7 @@ function getCellColor(id: number, health: number) {
   return colormap(health / 100);
 }
 
-function getIdFromCoords(x: number, y: number, matrix: Matrix) {
+function getIdFromCoords(x: number, y: number, matrix: IMatrix) {
   const rowSide = y >= matrix.rows / 2;
   const colSide = x >= matrix.cols / 2;
   return 1 * (colSide ? 1 : 0) + 2 * (rowSide ? 1 : 0);
@@ -85,13 +85,13 @@ function mapCoords(x: number, y: number, setup: BoardSetup) {
   return [x * diffX, y * diffY];
 }
 
-function drawMatrix(ctx, setup: BoardSetup) {
+function drawMatrix(ctx: any, setup: BoardSetup) {
   const width = setup.width / setup.board.matrix.cols;
   const height = setup.height / setup.board.matrix.rows;
   const drawCell = (i: number, j: number) => {
     const cellColor = getCellColor(
       getIdFromCoords(j, i, setup.board.matrix),
-      setup.board.matrix.get(i, j).health,
+      setup.board.matrix.matrix[i][j].health,
     );
     const color = getColorFromId(getIdFromCoords(j, i, setup.board.matrix));
     const [x, y] = mapCoords(j, i, setup);
@@ -109,8 +109,8 @@ function drawMatrix(ctx, setup: BoardSetup) {
   }
 }
 
-function drawArrows(ctx, setup: BoardSetup) {
-  const drawArrow = (playerId: number, arrow: Arrow) => {
+function drawArrows(ctx: any, setup: BoardSetup) {
+  const drawArrow = (playerId: number, arrow: IArrow) => {
     if (setup.players[playerId].isDead) {
       return;
     }
@@ -169,7 +169,7 @@ function drawArrows(ctx, setup: BoardSetup) {
   }
 }
 
-function drawBalls(ctx, setup: BoardSetup) {
+function drawBalls(ctx: any, setup: BoardSetup) {
   const drawBall = (playerId: number, x: number, y: number) => {
     const radio = 3;
     const color = getColorFromId(playerId);
@@ -193,7 +193,7 @@ function drawBalls(ctx, setup: BoardSetup) {
   }
 }
 
-export default function drawBoard(ctx, setup: BoardSetup) {
+export default function drawBoard(ctx: any, setup: BoardSetup) {
   ctx.clearRect(0, 0, setup.width, setup.height);
   drawMatrix(ctx, setup);
   drawArrows(ctx, setup);

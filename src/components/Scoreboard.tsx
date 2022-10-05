@@ -1,13 +1,13 @@
 import ColorSchema from '../../assets/ColorSchema';
 import DefaultStyles from '../shared/styles';
-import {Player} from '../shared/types';
+import {IPlayer} from '../shared/types';
 import {secondsSinceEpoch} from '../shared/utils';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import Svg, {Circle} from 'react-native-svg';
 
 type ScoreboardProps = {
-  players: Player[];
+  players: IPlayer[];
   beginTime: number;
   endTime: number;
 };
@@ -27,7 +27,7 @@ function getColorFromPlayerId(id: number) {
   }
 }
 
-function playerItem(player: Player, index: number) {
+function playerItem(player: IPlayer, index: number) {
   const textStyles = [DefaultStyles.defaultText];
   if (player.isDead) {
     textStyles.push({color: ColorSchema.light.dark});
@@ -57,7 +57,7 @@ const Scoreboard = (props: ScoreboardProps) => {
       const currentTime =
         props.endTime !== 0 ? props.endTime : secondsSinceEpoch() * 1000;
       setMatchTime(Math.round((currentTime - props.beginTime) / 1000));
-    }, 500);
+    }, 200);
     return () => clearInterval(interval);
   });
 

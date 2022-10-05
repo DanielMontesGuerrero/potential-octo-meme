@@ -1,13 +1,11 @@
-import ColorSchema from '../../assets/ColorSchema';
-import {PieceType} from './types';
-import {secondsSinceEpoch} from './utils';
+import {IGameState, IPlayer, PieceType, GamePhase} from './types';
 
-export const defaultPlayers = [
+export const defaultPlayers: IPlayer[] = [
   {
     id: 0,
     name: 'Player 1',
-    color: ColorSchema.yellow.normal,
     score: 0,
+    isDead: false,
     hand: [
       {
         type: PieceType.KING,
@@ -16,22 +14,22 @@ export const defaultPlayers = [
       },
       {
         type: PieceType.QUEEN,
-        quantity: 45,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.BISHOP,
-        quantity: 66,
+        quantity: 0,
         isActive: false,
       },
       {
-        type: PieceType.KNIGTH,
-        quantity: 234,
+        type: PieceType.KNIGHT,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.ROOK,
-        quantity: 34,
+        quantity: 0,
         isActive: false,
       },
       {
@@ -44,8 +42,8 @@ export const defaultPlayers = [
   {
     id: 1,
     name: 'Player 2',
-    color: ColorSchema.red.normal,
     score: 0,
+    isDead: false,
     hand: [
       {
         type: PieceType.KING,
@@ -54,22 +52,22 @@ export const defaultPlayers = [
       },
       {
         type: PieceType.QUEEN,
-        quantity: 45,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.BISHOP,
-        quantity: 66,
+        quantity: 0,
         isActive: false,
       },
       {
-        type: PieceType.KNIGTH,
-        quantity: 234,
+        type: PieceType.KNIGHT,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.ROOK,
-        quantity: 34,
+        quantity: 0,
         isActive: false,
       },
       {
@@ -79,11 +77,12 @@ export const defaultPlayers = [
       },
     ],
   },
+
   {
     id: 2,
     name: 'Player 3',
-    color: ColorSchema.blue.normal,
     score: 0,
+    isDead: false,
     hand: [
       {
         type: PieceType.KING,
@@ -92,22 +91,22 @@ export const defaultPlayers = [
       },
       {
         type: PieceType.QUEEN,
-        quantity: 45,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.BISHOP,
-        quantity: 66,
+        quantity: 0,
         isActive: false,
       },
       {
-        type: PieceType.KNIGTH,
-        quantity: 234,
+        type: PieceType.KNIGHT,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.ROOK,
-        quantity: 34,
+        quantity: 0,
         isActive: false,
       },
       {
@@ -117,11 +116,12 @@ export const defaultPlayers = [
       },
     ],
   },
+
   {
     id: 3,
     name: 'Player 4',
-    color: ColorSchema.green.normal,
     score: 0,
+    isDead: false,
     hand: [
       {
         type: PieceType.KING,
@@ -130,22 +130,22 @@ export const defaultPlayers = [
       },
       {
         type: PieceType.QUEEN,
-        quantity: 45,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.BISHOP,
-        quantity: 66,
+        quantity: 0,
         isActive: false,
       },
       {
-        type: PieceType.KNIGTH,
-        quantity: 234,
+        type: PieceType.KNIGHT,
+        quantity: 0,
         isActive: false,
       },
       {
         type: PieceType.ROOK,
-        quantity: 34,
+        quantity: 0,
         isActive: false,
       },
       {
@@ -157,154 +157,26 @@ export const defaultPlayers = [
   },
 ];
 
-export const defaultState = {
-  options: ['x2', 'pieza', '+100', '-100', 'efecto'],
-  messages: ['Hola xd', 'Que pro B)', 'Que noob'],
-  beginTime: secondsSinceEpoch(),
+export const defaultState: IGameState = {
+  players: defaultPlayers,
+  gameInfo: {
+    beginTime: 0,
+    endTime: 0,
+    phase: GamePhase.IDLE,
+  },
+  rouletteOptions: [[], [], [], []],
+  rouletteSelectedOptions: [-1, -1, -1, -1],
   board: {
     arrows: [{angle: 0}, {angle: 0}, {angle: 0}, {angle: 0}],
-    balls: [
-      [
-        {type: 1, position: {x: 0, y: 0}},
-        {type: 1, position: {x: 1, y: 1}},
-      ],
-      [
-        {type: 1, position: {x: 0, y: 5}},
-        {type: 1, position: {x: 1, y: 6}},
-      ],
-      [
-        {type: 1, position: {x: 5, y: 0}},
-        {type: 1, position: {x: 6, y: 1}},
-      ],
-      [
-        {type: 1, position: {x: 5, y: 5}},
-        {type: 1, position: {x: 6, y: 6}},
-      ],
-    ],
+    balls: [[], [], [], []],
     matrix: {
-      rows: 10,
-      cols: 10,
-      cells: [
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 10},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 0},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 10},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 0},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 10},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 0},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 10},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-        ],
-        [
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 100},
-          {health: 10},
-        ],
+      rows: 1,
+      cols: 1,
+      matrix: [
+        [{health: 100}],
+        [{health: 100}],
+        [{health: 100}],
+        [{health: 100}],
       ],
     },
   },

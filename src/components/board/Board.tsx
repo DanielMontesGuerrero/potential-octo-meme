@@ -1,5 +1,5 @@
 import DefaultStyles from '../../shared/styles';
-import {Board as BoardType, Player} from '../../shared/types';
+import {IBoard, IPlayer} from '../../shared/types';
 import drawBoard from './animator';
 import {GCanvasView} from '@flyskywhy/react-native-gcanvas';
 import React from 'react';
@@ -8,8 +8,8 @@ import {StyleSheet, View} from 'react-native';
 type BoardProps = {
   width: number;
   height: number;
-  board: BoardType;
-  players: Player[];
+  board: IBoard;
+  players: IPlayer[];
 };
 
 const Board = (props: BoardProps) => {
