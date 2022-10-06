@@ -37,20 +37,34 @@ const cardsContainerHeight =
 const rouletteHeight = 3 * (cardsContainerHeight / 6);
 const cardsHeight = 3 * (cardsContainerHeight / 4);
 
+const logSocketError = (
+  result: boolean,
+  errorCode: ErrorCodes,
+  errorDescription: string,
+) => {
+  if (!result) {
+    console.log('Error:', errorCode, errorDescription);
+  }
+};
+
 const Game = () => {
+  // TODO: props
   const token = 'token123';
   const host = 'ws://192.168.0.40:3000';
   const mode = 'ONLINE';
   // const mode = 'OFFLINE';
   const playerName = 'Player 1';
+
   const messageDelay = 250;
-  const playerId = 0;
   const gameUpdateRate = 10;
   const rouletteSelectionTime = 500;
   const rouletteSelectedShowTime = 100;
   const refreshRate = 1000;
+
   const socket = useRef<Socket>();
   const isConnected = useRef<boolean>(false);
+  const playerId = useRef<number>(0);
+
   const [gameHandler] = useState(new GameHandler(playerName, mode, socket));
   const [message, setMessage] = useState({
     content: 'Starting game',
@@ -63,10 +77,10 @@ const Game = () => {
   const [rouletteOptions, setRouletteOptions] = useState(
     gameHandler.getRouletteOptions(),
   );
-
   const [playersOrderedByScore, setPlayersOrdered] = useState(
     gameHandler.getPlayersOrderedByScore(),
   );
+  const [waitingMessage, setWaitingMessage] = useState('Connecting...');
 
   const updateGame = useCallback(
     (state: IGameState) => {
@@ -75,16 +89,6 @@ const Game = () => {
     },
     [gameHandler],
   );
-
-  const logSocketError = (
-    result: boolean,
-    errorCode: ErrorCodes,
-    errorDescription: string,
-  ) => {
-    if (!result) {
-      console.log('Not joined match', errorCode, errorDescription);
-    }
-  };
 
   const updateGameStateRequestLoop = useCallback(() => {
     if (isConnected.current) {
@@ -96,9 +100,14 @@ const Game = () => {
   const setPlayerId = useCallback(
     (id: number) => {
       gameHandler.setPlayerId(id);
+      playerId.current = id;
     },
     [gameHandler],
   );
+
+  const changeWaitMessage = useCallback((count: number) => {
+    setWaitingMessage(`Starting game in ${count}`);
+  }, []);
 
   useEffect(() => {
     if (mode !== 'ONLINE') {
@@ -107,7 +116,6 @@ const Game = () => {
     }
     socket.current = io(host);
     socket.current?.on('connect', () => {
-      console.log('Connected');
       socket.current?.emit(
         ConnectionEvents.PLAYER_JOINED,
         {
@@ -123,7 +131,7 @@ const Game = () => {
     });
 
     socket.current?.on(ConnectionEvents.COUNTDOWN, count => {
-      console.log(count);
+      changeWaitMessage(count);
     });
 
     socket.current?.on(ConnectionEvents.STATE_UPDATE, state => {
@@ -146,7 +154,13 @@ const Game = () => {
     return () => {
       socket.current?.disconnect();
     };
-  }, [host, updateGame, updateGameStateRequestLoop, setPlayerId]);
+  }, [
+    host,
+    updateGame,
+    updateGameStateRequestLoop,
+    setPlayerId,
+    changeWaitMessage,
+  ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -179,7 +193,7 @@ const Game = () => {
   const changeActive = (type: PieceType) => {
     gameHandler.addEvent({
       code: EventCode.CHANGED_ACTIVE_PIECE,
-      playerId,
+      playerId: playerId.current,
       newActivePiece: type,
     });
     setDummy(!dummy);
@@ -187,7 +201,7 @@ const Game = () => {
   const releasePiece = (type: PieceType) => {
     gameHandler.addEvent({
       code: EventCode.RELEASED_PIECE,
-      playerId,
+      playerId: playerId.current,
       pieceType: type,
     });
     setDummy(!dummy);
@@ -201,7 +215,7 @@ const Game = () => {
     }
     gameHandler.addEvent({
       code: EventCode.TRIGGERED_ROULETTE,
-      playerId,
+      playerId: playerId.current,
       triggeredAt: Date.now(),
     });
     setRouletteActive(true);
@@ -209,7 +223,7 @@ const Game = () => {
       setSelectedRouletteOption(gameHandler.getRouletteSelectedOption());
       gameHandler.addEvent({
         code: EventCode.ACKNOWLEDGED_ROULETTE,
-        playerId,
+        playerId: playerId.current,
       });
       setTimeout(() => {
         setRouletteActive(false);
@@ -222,7 +236,7 @@ const Game = () => {
     <>
       {!gameReady ? (
         <View style={DefaultStyles.centeredContainer}>
-          <Text>Connecting...</Text>
+          <Text>{waitingMessage}</Text>
         </View>
       ) : (
         <>
@@ -252,7 +266,7 @@ const Game = () => {
             <View style={styles.cardsContainer}>
               <CardBox
                 height={cardsHeight}
-                hand={gameHandler.getPlayers()[playerId].hand}
+                hand={gameHandler.getPlayers()[playerId.current].hand}
                 onActiveChanged={type => changeActive(type)}
                 onPieceReleased={type => releasePiece(type)}
               />

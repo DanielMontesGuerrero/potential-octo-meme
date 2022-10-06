@@ -107,10 +107,7 @@ class OnlineGameExecutor {
   }
 
   setGameState(state: IGameState) {
-    // console.log(state);
-    // this.gameState = state;
     for (let i = 0; i < this.gameState.players.length; i++) {
-      // this.gameState.players[i] = state.players[i];
       this.gameState.players[i].name = state.players[i].name;
       this.gameState.players[i].isDead = state.players[i].isDead;
       this.gameState.players[i].id = state.players[i].id;
@@ -118,7 +115,6 @@ class OnlineGameExecutor {
       this.gameState.players[i].score = state.players[i].score;
       this.gameState.players[i].message = state.players[i].message;
     }
-    // this.gameState.players = state.players;
     this.gameState.rouletteOptions = state.rouletteOptions;
     this.gameState.gameInfo.endTime = state.gameInfo.endTime;
     this.gameState.gameInfo.phase = state.gameInfo.phase;
@@ -134,7 +130,6 @@ class OnlineGameExecutor {
 
   getNextMessage() {
     if (this.playerId !== undefined && this.gameState !== undefined) {
-      console.log(this.gameState.players[this.playerId].message);
       return this.gameState.players[this.playerId].message;
     }
     return defaultState.players[0].message;
@@ -148,12 +143,10 @@ class OnlineGameExecutor {
   }
 
   addEvent(event: EnqueuedEvent) {
-    console.log('Send event');
     this.socket.current?.emit(
       ConnectionEvents.GAME_EVENT,
       event,
       (result: boolean, errorCode: ErrorCodes, message: string) => {
-        console.log('Ack event');
         if (!result) {
           console.log(message);
         }
