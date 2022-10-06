@@ -15,7 +15,7 @@ const Home = ({navigation}) => {
       <View style={styles.buttonsContainer}>
         <Button
           title="Play"
-          onPress={() => navigation.navigate('Game')}
+          onPress={() => navigation.navigate('CreateGame')}
           color="white"
           bgColor={ColorSchema.red.normal}
         />

@@ -47,14 +47,8 @@ const logSocketError = (
   }
 };
 
-const Game = () => {
-  // TODO: props
-  const token = 'token123';
-  const host = 'ws://192.168.0.40:3000';
-  const mode = 'ONLINE';
-  // const mode = 'OFFLINE';
-  const playerName = 'Player 1';
-
+const Game = ({route}) => {
+  const {token, host, mode, playerName} = route.params;
   const messageDelay = 250;
   const gameUpdateRate = 10;
   const rouletteSelectionTime = 500;
@@ -160,6 +154,9 @@ const Game = () => {
     updateGameStateRequestLoop,
     setPlayerId,
     changeWaitMessage,
+    mode,
+    playerName,
+    token,
   ]);
 
   useEffect(() => {
