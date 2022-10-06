@@ -29,6 +29,7 @@ function getColorFromPlayerId(id: number) {
 
 function playerItem(player: IPlayer, index: number) {
   const textStyles = [DefaultStyles.defaultText];
+  const icon = player.isDead ? '💀' : '';
   if (player.isDead) {
     textStyles.push({color: ColorSchema.light.dark});
   }
@@ -37,7 +38,8 @@ function playerItem(player: IPlayer, index: number) {
       <Svg height="10" width="10" style={styles.playerIcon}>
         <Circle cx="5" cy="5" r="5" fill={getColorFromPlayerId(player.id)} />
       </Svg>
-      <Text style={textStyles}>{`${player.score} - ${player.name}`}</Text>
+      <Text
+        style={textStyles}>{`${player.score} - ${player.name} ${icon}`}</Text>
     </View>
   );
 }

@@ -32,7 +32,6 @@ const CreateGame = ({navigation}) => {
         return;
       }
     }
-    console.log(gameConfig);
     navigation.navigate('Game', {
       playerName: gameConfig.playerName,
       host: gameConfig.host,

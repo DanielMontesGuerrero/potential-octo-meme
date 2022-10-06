@@ -47,7 +47,7 @@ const logSocketError = (
   }
 };
 
-const Game = ({route}) => {
+const Game = ({route, navigation}) => {
   const {token, host, mode, playerName} = route.params;
   const messageDelay = 250;
   const gameUpdateRate = 10;
@@ -179,6 +179,11 @@ const Game = ({route}) => {
     const refreshStateInterval = setInterval(() => {
       setRouletteOptions(gameHandler.getRouletteOptions());
       setPlayersOrdered(gameHandler.getPlayersOrderedByScore());
+      if (gameHandler.getGamePhase() === GamePhase.FINISHED) {
+        navigation.navigate('GameResults', {
+          players: gameHandler.getPlayersOrderedByScore(),
+        });
+      }
     }, refreshRate);
     return () => {
       clearInterval(interval);

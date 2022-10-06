@@ -10,6 +10,7 @@
 import ColorSchema from './assets/ColorSchema.js';
 import CreateGame from './src/views/CreateGame';
 import Game from './src/views/Game';
+import GameResults from './src/views/GameResults';
 import Home from './src/views/Home';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -37,6 +38,7 @@ const App = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Game">{props => <Game {...props} />}</Stack.Screen>
         <Stack.Screen name="CreateGame" component={CreateGame} />
+        <Stack.Screen name="GameResults" component={GameResults} />
       </Stack.Navigator>
       <FlashMessage position="top" />
     </NavigationContainer>
